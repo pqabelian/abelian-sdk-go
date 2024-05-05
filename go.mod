@@ -1,6 +1,6 @@
-module github.com/pqabelian/abel-sdk-go
+module github.com/pqabelian/abelian-sdk-go
 
-go 1.19
+go 1.11
 
 require (
 	github.com/abesuite/abec v0.0.0-00010101000000-000000000000
