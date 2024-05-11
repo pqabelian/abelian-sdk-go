@@ -111,7 +111,7 @@ func GenerateUnsignedRawTx(txDesc *TxDesc) (*UnsignedRawTx, error) {
 		serializedBlocksForRingGroup,
 		txRequestOutputDescs,
 		uint64(txDesc.TxFee),
-		nil,
+		txDesc.TxMemo,
 	)
 	if err != nil {
 		return nil, err
