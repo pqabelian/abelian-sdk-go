@@ -36,6 +36,7 @@ type AbecChainInfo struct {
 	Version         int64   `json:"version"`
 	ProtocolVersion int64   `json:"protocolversion"`
 	RelayFee        float64 `json:"relayfee"`
+	NetID           byte    `json:"netid"`
 }
 
 type AbecMempool map[string]struct {
@@ -81,6 +82,7 @@ type AbecTx struct {
 	Version       int64         `json:"version"`
 	Size          int64         `json:"size"`
 	FullSize      int64         `json:"fullsize"`
+	Memo          []byte        `json:"memo"`
 	Fee           float64       `json:"fee"`
 	Witness       string        `json:"witness"`
 	Vin           []*AbecTxVin  `json:"vin"`
