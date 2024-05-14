@@ -82,7 +82,7 @@ type AbecTx struct {
 	Version       int64         `json:"version"`
 	Size          int64         `json:"size"`
 	FullSize      int64         `json:"fullsize"`
-	Memo          []byte        `json:"memo"`
+	Memo          string        `json:"memo"`
 	Fee           float64       `json:"fee"`
 	Witness       string        `json:"witness"`
 	Vin           []*AbecTxVin  `json:"vin"`
