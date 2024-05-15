@@ -75,7 +75,6 @@ type TxDesc struct {
 	TxRingBlockDescs map[int64]*TxBlockDesc
 }
 
-// Deprecated: Use NewTxDescWithOptions instead.
 func NewTxDesc(txInDescs []*TxInDesc, txOutDescs []*TxOutDesc, txFee int64, txRingBlockDescs map[int64]*TxBlockDesc) *TxDesc {
 	return &TxDesc{
 		TxInDescs:        txInDescs,
@@ -84,30 +83,14 @@ func NewTxDesc(txInDescs []*TxInDesc, txOutDescs []*TxOutDesc, txFee int64, txRi
 		TxRingBlockDescs: txRingBlockDescs,
 	}
 }
-
-type TxDescOptionFunc func(*TxDesc) error
-
-func SetMemo(memo Bytes) TxDescOptionFunc {
-	return func(txDesc *TxDesc) error {
-		// check memo when need
-		txDesc.TxMemo = memo
-		return nil
-	}
-}
-
-func NewTxDescWithOptions(txInDescs []*TxInDesc, txOutDescs []*TxOutDesc, txFee int64, txRingBlockDescs map[int64]*TxBlockDesc, options ...TxDescOptionFunc) (*TxDesc, error) {
-	tx := &TxDesc{
+func NewTxDescWithMemo(txInDescs []*TxInDesc, txOutDescs []*TxOutDesc, txFee int64, txRingBlockDescs map[int64]*TxBlockDesc, txMemo Bytes) *TxDesc {
+	return &TxDesc{
 		TxInDescs:        txInDescs,
 		TxOutDescs:       txOutDescs,
 		TxFee:            txFee,
+		TxMemo:           txMemo,
 		TxRingBlockDescs: txRingBlockDescs,
 	}
-	for _, option := range options {
-		if err := option(tx); err != nil {
-			return nil, err
-		}
-	}
-	return tx, nil
 }
 
 // Define the UnsignedRawTx data type and methods.
