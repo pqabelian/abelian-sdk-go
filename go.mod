@@ -19,7 +19,7 @@ require (
 	golang.org/x/sys v0.10.0 // indirect
 )
 
-replace github.com/abesuite/abec => github.com/pqabelian/abec v0.0.0-20231206045108-7db3092bc81c
+replace github.com/abesuite/abec => github.com/pqabelian/abec v0.13.0
 
 replace github.com/abesuite/abeutil => github.com/pqabelian/abeutil v0.0.0-20231107022913-d6d3bf295938
 
