@@ -22,7 +22,7 @@ func NewTxInDesc(data Bytes, coinValue ...int64) *TxInDesc {
 	}
 }
 
-func (d *TxInDesc) GetCoinAddress() (*CoinAddress, error) {
+func (d *TxInDesc) GetCoinAddress() (*CoinAddressFullPrivacyPre, error) {
 	coinAddress, err := DecodeCoinAddressFromTxOutData(d.TxOutData)
 	if err != nil {
 		return nil, err

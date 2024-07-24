@@ -3,16 +3,24 @@ package core
 import (
 	"bytes"
 	"crypto/rand"
+	"crypto/sha256"
 	"encoding/binary"
 	"errors"
 	"fmt"
 	"hash/crc32"
 	"strings"
 
-	"github.com/abesuite/abec/abecrypto/abecryptoparam"
-	"github.com/abesuite/abec/chainhash"
 	"golang.org/x/crypto/sha3"
 )
+
+// DoubleHash  calculates hash(hash(b)) and returns the resulting bytes as a
+// Hash.
+//
+// NOTE: copy from Abelian
+func DoubleHash(b []byte) [32]byte {
+	first := sha256.Sum256(b)
+	return sha256.Sum256(first[:])
+}
 
 func GenerateRandomMnemonic() ([]string, error) {
 	seed := make([]byte, seedLength)
@@ -31,7 +39,7 @@ func GenerateCryptoSeedFromMnemonic(mnemonic []string, sequenceNumber uint64) ([
 	if len(seed) != seedLength+1 {
 		return nil, errors.New("GenerateCryptoSeedFromMnemonic: Invalid mnemonic word list specified")
 	}
-	seedH := chainhash.DoubleHashH(seed[:seedLength])
+	seedH := DoubleHash(seed[:seedLength])
 	if !bytes.Equal(seedH[:1], seed[seedLength:]) {
 		return nil, errors.New("GenerateCryptoSeedFromMnemonic: Invalid mnemonic word list specified")
 	}
@@ -43,7 +51,7 @@ func GenerateCryptoSeedFromMnemonic(mnemonic []string, sequenceNumber uint64) ([
 
 func seedToWords(seed []byte, wordlist []string) []string {
 	res := make([]string, 0, 24)
-	hash := chainhash.DoubleHashH(seed)
+	hash := DoubleHash(seed)
 	tmp := make([]byte, len(seed)+1)
 	copy(tmp, seed)
 	copy(tmp[len(seed):], hash[:1])
@@ -131,7 +139,10 @@ func generateCryptoSeed(usedSeed []byte, seedLength int, sequenceNumber uint64) 
 	}
 
 	seedHalfLength := seedLength >> 1
-	halfLength := abecryptoparam.PQRingCTPP.ParamSeedBytesLen()
+	halfLength, err := GetCryptoSchemeParamSeedBytesLen(CryptoSchemePQRingCT)
+	if err != nil {
+		return nil, errors.New("incompatible")
+	}
 	cryptoSeed := make([]byte, 2*halfLength)
 
 	var tmp []byte
@@ -166,7 +177,7 @@ func generateCryptoSeed(usedSeed []byte, seedLength int, sequenceNumber uint64) 
 	copy(cryptoSeed[halfLength:], t[:])
 
 	cryptoSeedTmp := make([]byte, 4, 4+len(cryptoSeed))
-	binary.BigEndian.PutUint32(cryptoSeedTmp[0:4], uint32(abecryptoparam.CryptoSchemePQRingCT))
+	binary.BigEndian.PutUint32(cryptoSeedTmp[0:4], uint32(CryptoSchemePQRingCT))
 	cryptoSeed = append(cryptoSeedTmp, cryptoSeed[:]...)
 
 	return cryptoSeed, nil
