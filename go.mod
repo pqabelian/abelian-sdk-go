@@ -1,4 +1,4 @@
-module github.com/pqabelian/abel-sdk-go
+module github.com/pqabelian/abelian-sdk-go
 
 go 1.19
 
