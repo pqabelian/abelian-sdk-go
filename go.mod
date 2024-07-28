@@ -1,11 +1,11 @@
 module github.com/pqabelian/abelian-sdk-go
 
-go 1.19
+go 1.18
 
 require (
 	github.com/pqabelian/abec v1.0.1-0.20240724140110-9d84da20fd1a
 	github.com/pqabelian/abeutil v0.0.0-20231107022913-d6d3bf295938
-	golang.org/x/crypto v0.25.0
+	golang.org/x/crypto v0.23.0
 )
 
 require (
